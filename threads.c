@@ -6,7 +6,7 @@
 /*   By: stakabay <stakabay@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 11:06:42 by stakabay          #+#    #+#             */
-/*   Updated: 2021/12/11 11:15:53 by stakabay         ###   ########.fr       */
+/*   Updated: 2021/12/11 17:05:04 by stakabay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ void	eating(t_philo *philo, int id)
 		err_shutdown_threads(philo->rules, "mutex error");
 }
 
-void	philo_action(void *philos)
+int	philo_action(void *philos)
 {
 	t_philo			*philo;
 	int				id;
@@ -112,8 +112,9 @@ void	philo_action(void *philos)
 	philo = (t_philo *)philos;
 	id = philo->id;
 	philo->last_meal_time = timestamp();
-	pthread_create(&philo->moni_thread, NULL, \
-			(void *)death_monitor, (void *)philo);
+	if (pthread_create(&philo->moni_thread, NULL, \
+			(void *)death_monitor, (void *)philo))
+		return (put_errmsg("create err"));
 	if (id % 2)
 		usleep(1000);
 	while (!philo->rules->died && !philo->rules->all_ate)
@@ -125,6 +126,7 @@ void	philo_action(void *philos)
 		smart_sleep(philo->rules, philo->rules->sleep);
 		put_status(philo->rules, id, "is thinking");
 	}
-	pthread_join(philo->moni_thread, NULL);
-	pthread_exit(0);
+	if (pthread_join(philo->moni_thread, NULL))
+		return (put_errmsg("join err"));
+	return (EXIT_SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: stakabay <stakabay@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 11:11:11 by stakabay          #+#    #+#             */
-/*   Updated: 2021/12/11 11:11:56 by stakabay         ###   ########.fr       */
+/*   Updated: 2021/12/11 17:05:19 by stakabay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,13 +50,13 @@ typedef struct s_rules
 
 void		ft_free(t_rules *rule);
 int			put_errmsg(char *str);
-void		ft_error_exit(t_rules *rule, char *str);
+int			ft_error_exit(t_rules *rule, char *str);
 void		err_shutdown_threads(t_rules *rule, char *str);
 int			ft_ph_atoi(const char *str);
-void		init_args(t_rules *r, char **av);
+int			init_args(t_rules *r, char **av);
 void		init_philos(t_rules *rule);
-void		init(t_rules *rule, char **av, int argc);
-void		philo_action(void *philos);
+int			init(t_rules *rule, char **av, int argc);
+int			philo_action(void *philos);
 void		eating(t_philo *philo, int id);
 void		eatnum_monitor(void *rules);
 void		death_monitor(void *philos);

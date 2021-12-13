@@ -6,7 +6,7 @@
 /*   By: stakabay <stakabay@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 23:55:50 by stakabay          #+#    #+#             */
-/*   Updated: 2021/12/11 11:15:27 by stakabay         ###   ########.fr       */
+/*   Updated: 2021/12/11 12:20:27 by stakabay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,28 +38,23 @@ int	ft_ph_atoi(const char *str)
 	return ((int)num);
 }
 
-void	init_args(t_rules *r, char **av)
+int		init_args(t_rules *r, char **av)
 {
 	r->num_philos = ft_ph_atoi(av[1]);
 	r->death = ft_ph_atoi(av[2]);
 	r->eat = ft_ph_atoi(av[3]);
 	r->sleep = ft_ph_atoi(av[4]);
 	if (r->num_philos < 2 || r->death < 0 || r->eat < 0 || r->sleep < 0)
-	{
-		put_errmsg("invalid args");
-		exit(EXIT_FAILURE);
-	}
+		return (EXIT_FAILURE);
 	if (av[5])
 	{
 		r->eat_lim = ft_ph_atoi(av[5]);
 		if (r->eat_lim <= 0)
-		{
-			put_errmsg("invalid args");
-			exit(EXIT_FAILURE);
-		}
+			return (EXIT_FAILURE);
 	}
 	else
 		r->eat_lim = -1;
+	return (0);
 }
 
 void	init_philos(t_rules *rule)
@@ -76,17 +71,19 @@ void	init_philos(t_rules *rule)
 	}
 }
 
-void	init(t_rules *rule, char **av, int argc)
+int	init(t_rules *rule, char **av, int argc)
 {
 	if (argc != 5 && argc != 6)
-		exit(put_errmsg("Invalid arguments num"));
-	init_args(rule, av);
+		return (put_errmsg("Invalid arguments num"));
+	if (init_args(rule, av))
+		return (put_errmsg("invalid args"));
 	rule->died = 0;
 	rule->all_ate = 0;
 	rule->folks = malloc(sizeof(pthread_mutex_t) * rule->num_philos);
 	rule->philos = malloc(sizeof(t_philo) * rule->num_philos);
 	rule->threads = malloc(sizeof(pthread_t) * rule->num_philos);
 	if (!rule->folks || !rule->philos || !rule->threads)
-		exit(put_errmsg("malloc error"));
+		return (put_errmsg("malloc error"));
 	init_philos(rule);
+	return (0);
 }

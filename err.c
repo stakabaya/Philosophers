@@ -6,7 +6,7 @@
 /*   By: stakabay <stakabay@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 11:14:29 by stakabay          #+#    #+#             */
-/*   Updated: 2021/12/11 11:14:39 by stakabay         ###   ########.fr       */
+/*   Updated: 2021/12/11 16:15:51 by stakabay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,11 @@ int	put_errmsg(char *str)
 	return (EXIT_FAILURE);
 }
 
-void	ft_error_exit(t_rules *rule, char *str)
+int	ft_error_exit(t_rules *rule, char *str)
 {
 	put_errmsg(str);
 	ft_free(rule);
-	exit(EXIT_FAILURE);
+	return (EXIT_FAILURE);
 }
 
 void	err_shutdown_threads(t_rules *rule, char *str)

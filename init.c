@@ -6,7 +6,7 @@
 /*   By: stakabay <stakabay@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 23:55:50 by stakabay          #+#    #+#             */
-/*   Updated: 2021/12/11 12:20:27 by stakabay         ###   ########.fr       */
+/*   Updated: 2021/12/18 01:08:17 by stakabay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	ft_ph_atoi(const char *str)
 	return ((int)num);
 }
 
-int		init_args(t_rules *r, char **av)
+int	init_args(t_rules *r, char **av)
 {
 	r->num_philos = ft_ph_atoi(av[1]);
 	r->death = ft_ph_atoi(av[2]);

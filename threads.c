@@ -6,7 +6,7 @@
 /*   By: stakabay <stakabay@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 11:06:42 by stakabay          #+#    #+#             */
-/*   Updated: 2021/12/11 17:05:04 by stakabay         ###   ########.fr       */
+/*   Updated: 2021/12/18 01:32:20 by stakabay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	death_monitor(void *philos)
 		{
 			rule->died = 1;
 			rt |= pthread_mutex_lock(&rule->writing);
-			printf("%lli %d %s\n", timestamp(), philo->id, "died");
+			printf("%lli %d %s\n", timestamp(), philo->id + 1, "died");
 			rt |= pthread_mutex_unlock(&rule->writing);
 		}
 		rt |= pthread_mutex_unlock(&rule->checking);

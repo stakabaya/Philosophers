@@ -6,7 +6,7 @@
 /*   By: stakabay <stakabay@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 11:13:23 by stakabay          #+#    #+#             */
-/*   Updated: 2021/12/12 21:44:31 by stakabay         ###   ########.fr       */
+/*   Updated: 2021/12/18 01:19:53 by stakabay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,15 @@ void	put_status(t_rules *rule, int id, char *str)
 
 	if (pthread_mutex_lock(&rule->writing))
 	{
-		err_shutdown_threads(rule, ">>>>>>>mutex lock error");
+		err_shutdown_threads(rule, "mutex lock error");
 	}
 	time = timestamp();
 	if (rule->died == 0 && rule->all_ate == 0)
 	{
-		printf("%lli %d %s\n", time, id, str);
+		printf("%lli %d %s\n", time, id + 1, str);
 	}
 	if (pthread_mutex_unlock(&rule->writing))
-		err_shutdown_threads(rule, ">>>>>>>mutex error");
+		err_shutdown_threads(rule, "mutex error");
 }
 
 //mutex_initは常に1を返し、失敗しない
@@ -45,15 +45,15 @@ int	game_start(t_rules *rule)
 
 	rt = 0;
 	i = 0;
+	pthread_mutex_init(&rule->writing, NULL);
+	pthread_mutex_init(&rule->checking, NULL);
 	while (i < rule->num_philos)
 	{
 		pthread_mutex_init(&rule->folks[i], NULL);
 		rt |= pthread_create(&rule->threads[i], NULL, \
-								(void *)philo_action, (void *)&rule->philos[i]);
+							(void *)philo_action, (void *)&rule->philos[i]);
 		i++;
 	}
-	pthread_mutex_init(&rule->writing, NULL);
-	pthread_mutex_init(&rule->checking, NULL);
 	rt |= pthread_create(&rule->eat_moni_thread, NULL, \
 						(void *)eatnum_monitor, (void *)rule);
 	if (rt)
@@ -92,7 +92,7 @@ int	main(int argc, char **argv)
 {
 	t_rules			rule;
 
-	if(init(&rule, argv, argc))
+	if (init(&rule, argv, argc))
 		return (EXIT_FAILURE);
 	if (game_start(&rule))
 		return (EXIT_FAILURE);
@@ -100,12 +100,4 @@ int	main(int argc, char **argv)
 		return (EXIT_FAILURE);
 	ft_free(&rule);
 	return (EXIT_SUCCESS);
-}
-
-
-#include <stdio.h>
-void    destructor_leaks(void)__attribute__((destructor));
-void    destructor_leaks(void)
-{
-   system("leaks philo");
 }
